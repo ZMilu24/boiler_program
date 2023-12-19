@@ -15,7 +15,7 @@ def logging():
     data=AB.get_all("rt_temp")
     cmd="INSERT INTO log (currentTime, meterValue) VALUES ('"+str(datetime.now().strftime("%H.%M.%S"))+"', "+str(data[0][2])+" )" # meterValue is termometer value
     AB.command(cmd)
-    Timer(5, logging).start()
+    Timer(5*60, logging).start()
 
 def check():
     data=AB.get_all("rt_temp")
@@ -26,7 +26,10 @@ def check():
     AB.command(cmd)
 
 def data_getter(tp): #tp means type
-    data=request.get_json()[tp]
+    if (request.get_json()[tp]):
+        data=request.get_json()[tp]
+    else:
+        return("WRONG VALUE")
     cmd="UPDATE rt_temp SET "+tp+" = "+str(data)
     AB.command(cmd)
     check()
@@ -57,5 +60,5 @@ def get_log():
     return(jsonify(output))
 
 if (__name__ == "__main__") :
-    Timer(5, logging).start()
+    Timer(1, logging).start()
     app.run(debug=True)
