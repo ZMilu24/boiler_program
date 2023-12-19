@@ -26,10 +26,7 @@ def check():
     AB.command(cmd)
 
 def data_getter(tp): #tp means type
-    if (request.get_json()[tp]):
-        data=request.get_json()[tp]
-    else:
-        return("WRONG VALUE")
+    data=request.get_json()[tp]
     cmd="UPDATE rt_temp SET "+tp+" = "+str(data)
     AB.command(cmd)
     check()
