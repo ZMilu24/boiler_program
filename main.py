@@ -36,12 +36,12 @@ def data_getter(tp): #tp means type
     return(data)
 
 @app.route("/termometer-input", methods=["POST"])
-def termometer_input():
+def termometer_input(): #input json{meterValue : 22}
     termometer=data_getter("meterValue")
     return(jsonify({"termometerValue" : termometer}))
 
 @app.route("/user-input", methods=["POST"])
-def user_input():
+def user_input(): #input json{userValue : 22}
     user=data_getter("userValue")
     return(jsonify({"userValue" : user}))
 
