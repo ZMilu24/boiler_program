@@ -1,6 +1,4 @@
-import time
 from datetime import datetime
-from multiprocessing import Process
 from threading import Timer
 
 from flask import Flask, jsonify, request
@@ -36,12 +34,12 @@ def data_getter(tp): #tp means type
     return(data)
 
 @app.route("/termometer-input", methods=["POST"])
-def termometer_input(): #input json{meterValue : 22}
+def termometer_input(): #input json{"meterValue" : 22}
     termometer=data_getter("meterValue")
     return(jsonify({"termometerValue" : termometer}))
 
 @app.route("/user-input", methods=["POST"])
-def user_input(): #input json{userValue : 22}
+def user_input(): #input json{"userValue" : 22}
     user=data_getter("userValue")
     return(jsonify({"userValue" : user}))
 
