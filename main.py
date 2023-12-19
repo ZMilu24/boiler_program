@@ -26,7 +26,10 @@ def check():
     AB.command(cmd)
 
 def data_getter(tp): #tp means type
-    data=request.get_json()[tp]
+    if (not request.get_json()[tp] < 10 and not request.get_json()[tp] > 30):
+        data=request.get_json()[tp]
+    else:
+        return("WRONG VALUE")
     cmd="UPDATE rt_temp SET "+tp+" = "+str(data)
     AB.command(cmd)
     check()
