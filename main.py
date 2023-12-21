@@ -6,7 +6,24 @@ from database import SQL
 
 app = Flask(__name__)
 AB=SQL()
+try:
+    AB.create_database("boiler")
+    print("Database created")
+except:
+    print("Database exists")
 AB.connect("boiler")
+try:
+    AB.create_table("log (time VARCHAR(255), value INT)")
+    print("log table created")
+except:
+    print("log table exists")
+try:
+    AB.create_table("rt_temp (active BOOL, userValue INT, meterValue INT)")
+    print("rt_temp table created")
+except:
+    print("rt_temp table exists") #rt_temp means real time temperature
+asd="INSERT INTO rt_temp (active, userValue, meterValue) VALUES (0, 0, 0)" # meterValue is termometer value
+AB.command(asd)
 
 def check():
     data=AB.get_all("rt_temp")
@@ -17,13 +34,11 @@ def check():
     AB.command(cmd)
 
 def data_getter(tp): #tp means type
-    if (not request.get_json()[tp] < 10 and not request.get_json()[tp] > 30):
-        data=request.get_json()[tp]
-    else:
-        return("WRONG VALUE")
+    data=request.get_json()[tp]
     cmd="UPDATE rt_temp SET "+tp+" = "+str(data)
+    print(cmd)
     AB.command(cmd)
-    check()
+    #check()
     return(data)
 
 @app.route("/termometer-input", methods=["POST"])
