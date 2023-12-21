@@ -1,5 +1,4 @@
 from datetime import datetime
-from threading import Timer
 
 from flask import Flask, jsonify, request
 
@@ -8,12 +7,6 @@ from database import SQL
 app = Flask(__name__)
 AB=SQL()
 AB.connect("boiler")
-
-def logging():
-    data=AB.get_all("rt_temp")
-    cmd="INSERT INTO log (currentTime, meterValue) VALUES ('"+str(datetime.now().strftime("%H.%M.%S"))+"', "+str(data[0][2])+" )" # meterValue is termometer value
-    AB.command(cmd)
-    Timer(5*60, logging).start()
 
 def check():
     data=AB.get_all("rt_temp")
@@ -36,6 +29,8 @@ def data_getter(tp): #tp means type
 @app.route("/termometer-input", methods=["POST"])
 def termometer_input(): #input json{"meterValue" : 22}
     termometer=data_getter("meterValue")
+    cmd="INSERT INTO log (currentTime, meterValue) VALUES ('"+str(datetime.now().strftime("%H.%M.%S"))+"', "+str(termometer)+" )" # meterValue is termometer value
+    AB.command(cmd)
     return(jsonify({"termometerValue" : termometer}))
 
 @app.route("/user-input", methods=["POST"])
@@ -46,6 +41,7 @@ def user_input(): #input json{"userValue" : 22}
 @app.route("/get-data")
 def get_data():
     data=AB.get_all("rt_temp")
+    print(data)
     return(jsonify({"Status" : data[0][0], "User value" : data[0][1], "Termometer value" : data[0][2]}))
 
 @app.route("/get-log")
@@ -58,5 +54,4 @@ def get_log():
     return(jsonify(output))
 
 if (__name__ == "__main__") :
-    Timer(1, logging).start()
     app.run(debug=True)
