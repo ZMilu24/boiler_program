@@ -23,6 +23,8 @@ try:
 except:
     print("log table exists")
 
+with open("log.txt", 'w', encoding="utf-8") as write:
+    print("Time\t\tTermometer value", file=write)
 
 def rt_temp_check():
     AB.connect("boiler")
@@ -65,6 +67,8 @@ def termometer_input(): #input json{"meterValue" : 22}
     AB.set_meter(termometer)
     line="INSERT INTO log (currentTime, meterValue) VALUES ('"+str(datetime.now().strftime("%H.%M.%S"))+"', "+str(termometer)+" )" # meterValue is termometer value
     cmd(line)
+    with open("log.txt", 'a', encoding="utf-8") as write:
+        print(str(datetime.now().strftime("%H.%M.%S"))+"\t"+str(termometer), file=write)
     return(jsonify({"termometerValue" : termometer}))
 
 @app.route("/user-input", methods=["POST"])
