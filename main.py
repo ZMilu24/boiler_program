@@ -33,7 +33,7 @@ def rt_temp_check():
         print("rt_temp table exists") #rt_temp means real time temperature
     try:
         data=AB.get_all("rt_temp")
-        if (data[0][1] > data[0][2]):
+        if (data[0][1] < data[0][2]):
             return("rt_record does excist")
     except:
         AB.create_rt_temp_record()
