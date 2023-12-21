@@ -33,19 +33,3 @@ class SQL():
     def __init__(self):
         self.mydb=None
         self.mycursor=None
-        try:
-            self.create_database("boiler")
-            print("Database created")
-        except:
-            print("Database exists")
-        self.connect("boiler")
-        try:
-            self.create_table("log (time VARCHAR(255), value INT)")
-            print("log table created")
-        except:
-            print("log table exists")
-        try:
-            self.create_table("rt_temp (active BOOL, userValue INT, meterValue INT)")
-            print("rt_temp table created")
-        except:
-            print("rt_temp table exists") #rt_temp means real time temperature
